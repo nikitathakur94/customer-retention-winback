@@ -1,0 +1,155 @@
+specification_version: '1.0'
+configuration_status: INITIAL_DESIGN_NOT_EXECUTION_RESULTS
+project:
+  name: Customer Retention & Win-Back Analytics
+  owner: Nikita Thakur
+  historical_context: Factspan / Macy’s Customer Intelligence, May 2016–June 2019
+  disclosure: Public-data reconstruction inspired by the business problem; not original Macy’s data, code,
+    or measured company impact.
+  implementation_subdirectory: project
+execution:
+  local_only: true
+  paid_services_required: false
+  allow_outreach_or_crm_writes: false
+  allow_automatic_publication: false
+  raw_data_in_git: false
+  automatic_dataset_substitution: false
+  timezone: UTC
+  random_seed: 2801
+  actual_ram_bytes: null
+  actual_available_disk_bytes: null
+  duckdb_memory_limit: null
+  duckdb_threads: null
+  note: Inspect the target machine and set bounded resources before processing; null does not authorize unlimited
+    resources.
+sampling:
+  dev_fraction: 0.1
+  unit: user_id
+  method: stable_digest_of_string_user_id_modulo_fixed_denominator
+  preserve_all_events_for_selected_users_across_all_months: true
+  final_mode: full
+retention_task:
+  dataset_id: rees46_cosmetics
+  unit:
+  - user_id
+  - as_of_timestamp
+  lookback_days: 60
+  label_horizon_days: 28
+  feature_interval: '[as_of_timestamp - lookback_days, as_of_timestamp)'
+  eligibility: At least one valid purchase event in the feature interval, independent of price validity.
+  outcome_interval: '[as_of_timestamp, as_of_timestamp + label_horizon_days)'
+  positive_class: non_repurchase_28d
+  label_maturity: Full outcome interval within verified data coverage and no unresolved material coverage gap.
+  immature_label: null
+  purchase_frequency_primary_unit: distinct_UTC_purchasing_day
+  purchase_occasion_proxy: same user_id and purchase event_time; inspect sensitivity to user/session and purchasing
+    day definitions
+  currency_until_verified: source_monetary_units
+  forbid_true_order_and_audited_revenue_labels: true
+temporal_plan:
+- split: train
+  as_of_timestamp: '2019-12-01T00:00:00Z'
+  outcome_end_exclusive: '2019-12-29T00:00:00Z'
+- split: validation
+  as_of_timestamp: '2019-12-30T00:00:00Z'
+  outcome_end_exclusive: '2020-01-27T00:00:00Z'
+- split: test
+  as_of_timestamp: '2020-01-28T00:00:00Z'
+  outcome_end_exclusive: '2020-02-25T00:00:00Z'
+- split: latest_unlabeled
+  as_of_timestamp: '2020-03-01T00:00:00Z'
+  outcome_end_exclusive: null
+modeling:
+  base_model_candidates:
+  - constant_prevalence
+  - recency_or_rfm_baseline
+  - regularized_logistic_regression
+  - histogram_gradient_boosting
+  required_ablation:
+  - purchase_only
+  - purchase_and_digital
+  forbidden_predictors:
+  - user_id
+  - source_row_id
+  - repurchase_28d
+  - non_repurchase_28d
+  - next_purchase_date
+  - future_event_aggregates
+  validation_calibration_fraction: 0.5
+  validation_policy_selection_fraction: 0.5
+  validation_partition_method: stable_customer_disjoint_hash
+  freeze_before_test:
+  - base_model
+  - preprocessing
+  - calibrator
+  - feature_contract
+  - cohort_rules
+  - operating_policy
+  top_audience_fractions:
+  - 0.05
+  - 0.1
+  - 0.2
+  desired_model_score: null
+candidate_policy:
+  recent_purchase_suppression_days: 7
+  suppression_setting_status: PROPOSED_BUSINESS_ASSUMPTION
+  segment_precedence_must_be_explicit: true
+  default_contactability: unknown
+  default_consent: unknown
+  operational_send_authorized: false
+  audience_capacity: null
+  note: Choose and document capacity/threshold assumptions before final-test inspection; never optimize them
+    on test outcomes.
+economics_scenario:
+  evidence_type: ASSUMPTION_SCENARIO
+  enabled_by_default: false
+  p0: null
+  absolute_effect_delta: null
+  gross_basket_value_V: null
+  contribution_margin_fraction_m: null
+  incentive_cost_D: null
+  redemption_fraction_r: null
+  contact_cost_c: null
+  formula_per_contact: delta*V*m - (p0+delta)*r*D - c
+  do_not_infer_untreated_p0_from_observational_risk_as_causal_truth: true
+proposed_cosmetics_experiment:
+  status: PROTOCOL_AND_ASSIGNMENT_DRY_RUN_ONLY
+  primary_outcome: repurchase_28d
+  proposed_arms:
+  - no_contact
+  - reminder_content
+  - incentive
+  alpha_family: 0.05
+  power_target: 0.8
+  baseline_rate_assumption: null
+  absolute_mde: null
+  multiplicity_plan: Plan conservatively for two treatment-control comparisons; document final method and distinguish
+    raw from adjusted inference.
+hillstrom:
+  dataset_id: hillstrom_email
+  followup_days: 14
+  primary_experiment_outcome: conversion
+  secondary_outcomes:
+  - visit
+  - spend
+  first_uplift_comparison:
+    treatment: Mens E-Mail
+    control: No E-Mail
+  uplift_learning_target: visit
+  uplift_target_disclosure: Engagement uplift, not automatically purchase retention or incremental profit.
+  train_fraction: 0.6
+  validation_fraction: 0.2
+  test_fraction: 0.2
+  stratify_split_by: segment
+  split_unit: stable_source_row_customer_identifier
+  forbidden_predictors:
+  - visit
+  - conversion
+  - spend
+  - source_row_id
+  cross_dataset_effect_transport: forbidden
+evidence_types:
+- OBSERVED
+- MODEL_ESTIMATE
+- ASSUMPTION_SCENARIO
+- NOT_AVAILABLE

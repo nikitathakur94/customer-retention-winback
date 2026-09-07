@@ -1,0 +1,165 @@
+specification_version: '1.0'
+status: DEFINITION_SEEDS_NOT_COMPUTED_RESULTS
+global_rules:
+  timestamp_timezone: UTC
+  interval_convention: left_closed_right_open
+  unknown_result: null
+  zero_denominator_result: null
+  no_cross_dataset_aggregation: true
+  no_sum_of_snapshot_population_counts_as_unique_people: true
+  required_result_metadata:
+  - metric_id
+  - value
+  - unit
+  - dataset_id
+  - run_id
+  - run_mode
+  - as_of_timestamp
+  - window_start
+  - window_end_exclusive
+  - split
+  - numerator
+  - denominator
+  - method
+  - evidence_type
+  - source_artifact
+metrics:
+- id: eligible_buyers
+  dataset: rees46_cosmetics
+  grain: as_of_timestamp
+  definition: Count distinct users with any valid purchase in [t-60d,t).
+  unit: observed_customers
+  evidence_type: OBSERVED
+- id: repurchase_28d
+  dataset: rees46_cosmetics
+  grain: user_id, as_of_timestamp
+  definition: 1 if any valid purchase event in [t,t+28d); 0 only when complete usable follow-up and no such
+    purchase; null otherwise.
+  unit: binary_or_null
+  evidence_type: OBSERVED
+- id: non_repurchase_28d
+  dataset: rees46_cosmetics
+  grain: user_id, as_of_timestamp
+  definition: 1-repurchase_28d for usable mature labels; null otherwise.
+  unit: binary_or_null
+  evidence_type: OBSERVED
+- id: repurchase_rate_28d
+  dataset: rees46_cosmetics
+  grain: as_of_timestamp, eligible_cohort
+  numerator: sum(repurchase_28d) among usable mature labels
+  denominator: eligible customers with usable mature labels in the same cohort
+  unit: fraction
+  evidence_type: OBSERVED
+- id: non_repurchase_risk
+  dataset: rees46_cosmetics
+  grain: user_id, as_of_timestamp, model_version
+  definition: Frozen calibrated estimate P(non_repurchase_28d=1 | pre-cutoff features).
+  unit: probability
+  evidence_type: MODEL_ESTIMATE
+- id: historical_purchase_event_value_proxy_60d
+  dataset: rees46_cosmetics
+  grain: user_id, as_of_timestamp
+  definition: Sum valid positive purchase-event prices in [t-60d,t), under a recorded duplicate policy; retain
+    value-missingness metadata and sensitivity output.
+  unit: source_monetary_units_until_verified
+  evidence_type: OBSERVED
+  prohibited_aliases:
+  - audited_revenue
+  - net_revenue
+  - profit
+  - clv
+  - revenue_saved
+- id: top_k_size
+  dataset: rees46_cosmetics
+  grain: as_of_timestamp, eligible_evaluation_cohort, policy, fraction
+  definition: For N>0, min(N, ceil(N*fraction)); sort by frozen policy then deterministic string user_id tie-break.
+    For N=0, K=0.
+  unit: customers
+  evidence_type: OBSERVED
+- id: risk_precision_at_k
+  dataset: rees46_cosmetics
+  grain: as_of_timestamp, policy, K
+  numerator: observed non_repurchase_28d positives in the selected mature evaluation top-K
+  denominator: K in that same mature evaluation population
+  unit: fraction
+  evidence_type: OBSERVED
+  warning: Risk-ranking metric, not response to treatment.
+- id: risk_recall_at_k
+  dataset: rees46_cosmetics
+  grain: as_of_timestamp, policy, K
+  numerator: observed non_repurchase_28d positives in selected top-K
+  denominator: all observed non_repurchase_28d positives in the same mature eligible evaluation population
+  unit: fraction
+  evidence_type: OBSERVED
+- id: risk_lift_at_k
+  dataset: rees46_cosmetics
+  grain: as_of_timestamp, policy, K
+  definition: risk_precision_at_k / non_repurchase prevalence in the same mature eligible evaluation population;
+    null if prevalence is zero or undefined.
+  unit: ratio
+  evidence_type: OBSERVED
+  warning: Not causal campaign lift.
+- id: average_precision_non_repurchase
+  dataset: rees46_cosmetics
+  grain: split, model_version
+  definition: sklearn.metrics.average_precision_score(y_non_repurchase,p_non_repurchase); report relevant prevalence
+    alongside.
+  unit: score
+  evidence_type: OBSERVED
+- id: average_precision_repurchase
+  dataset: rees46_cosmetics
+  grain: split, model_version
+  definition: sklearn.metrics.average_precision_score(1-y_non_repurchase,1-p_non_repurchase); report repurchase
+    prevalence alongside.
+  unit: score
+  evidence_type: OBSERVED
+- id: brier_score
+  dataset: rees46_cosmetics
+  grain: split, model_version
+  definition: Mean squared difference between probability and observed binary target on mature labels; compare
+    with the frozen constant baseline.
+  unit: score
+  evidence_type: OBSERVED
+- id: analytical_candidate_count
+  dataset: rees46_cosmetics
+  grain: as_of_timestamp, policy
+  definition: Unique eligible users selected under the frozen policy and analytical suppression rules; this
+    is not a count of legally contactable people.
+  unit: observed_customers
+  evidence_type: OBSERVED
+- id: scenario_incremental_contribution_per_contact
+  dataset: rees46_cosmetics
+  grain: scenario_id
+  definition: delta*V*m - (p0+delta)*r*D - c, under the explicit equal-basket and incentive assumptions in
+    the brief.
+  unit: assumed_monetary_units_per_contact
+  evidence_type: ASSUMPTION_SCENARIO
+- id: hillstrom_conversion_rate
+  dataset: hillstrom_email
+  grain: assigned_arm, analysis_population
+  numerator: sum(conversion) in assigned arm
+  denominator: all customers assigned to that arm in the analysis population
+  unit: fraction
+  evidence_type: OBSERVED
+- id: hillstrom_mean_spend_per_assigned_customer
+  dataset: hillstrom_email
+  grain: assigned_arm, analysis_population
+  numerator: sum(spend) in assigned arm
+  denominator: all customers assigned to that arm, including non-converters
+  unit: source_dollars_per_assigned_customer
+  evidence_type: OBSERVED
+- id: hillstrom_conversion_ate
+  dataset: hillstrom_email
+  grain: treatment_control_contrast, analysis_population
+  definition: Mean conversion in the specified randomized email arm minus mean conversion in the no-email arm;
+    attach confidence interval and multiplicity context.
+  unit: absolute_probability_difference
+  evidence_type: OBSERVED
+  warning: Independent study estimate; not transportable as a measured effect for cosmetics or Macy’s.
+- id: hillstrom_predicted_visit_uplift
+  dataset: hillstrom_email
+  grain: source_row_customer_identifier, model_version
+  definition: Frozen T-learner estimate P(visit=1|T=1,X)-P(visit=1|T=0,X); only pre-treatment X.
+  unit: absolute_probability_difference
+  evidence_type: MODEL_ESTIMATE
+  warning: Estimated heterogeneous engagement effect, not known individual causal truth.

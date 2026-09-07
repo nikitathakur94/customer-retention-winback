@@ -1,0 +1,44 @@
+{
+  "kit_name": "Customer Retention & Win-Back Analytics — Codex specification kit",
+  "created_date": "2026-09-07",
+  "contains_raw_datasets": false,
+  "contains_executed_project_results": false,
+  "guidance_validation": "YAML parsing and specified 28-day temporal arithmetic checked; project not implemented or executed in this kit.",
+  "files": [
+    {
+      "path": "ACCEPTANCE_CHECKLIST.md",
+      "bytes": 5833,
+      "sha256": "255f2a74701a23e357583955be25acd4af8bc65661cfe3576781693c00c3279c"
+    },
+    {
+      "path": "CODEX_MASTER_PROMPT.md",
+      "bytes": 50307,
+      "sha256": "6c73253736df683ca518ba37ecaa97905b93bb9efed8f63dc94542bbe947febd"
+    },
+    {
+      "path": "RESOURCES.md",
+      "bytes": 6332,
+      "sha256": "7d51d96eea07497ec78340864c320050a90b1bd729f2cb106ea5bb92179601c4"
+    },
+    {
+      "path": "START_HERE.md",
+      "bytes": 4085,
+      "sha256": "9d202ae920110d3d788feeb38a04b80d2e8e19f77c6f788b307d7efb84c2c461"
+    },
+    {
+      "path": "resources/metric_contracts.yaml",
+      "bytes": 6300,
+      "sha256": "584d0f5ae1cdcb5fbfb8b22df8b8768e80f0b7cdf055d57d4f5d38285b270634"
+    },
+    {
+      "path": "resources/project_spec.yaml",
+      "bytes": 5073,
+      "sha256": "c6be6eee16183001aab8f8c5fb9dedc6d76059c30575a8f5d3ece0d084a50586"
+    },
+    {
+      "path": "resources/source_manifest.yaml",
+      "bytes": 3681,
+      "sha256": "b8306e4ae85870b8acc192252ccf8b57f138661e9cdcc0f75ec951aa7bbf71bb"
+    }
+  ]
+}

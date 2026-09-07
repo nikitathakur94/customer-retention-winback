@@ -1,0 +1,96 @@
+specification_version: '1.0'
+research_date: '2026-09-07'
+verification_scope: Publisher pages and official documentation researched; data archives not downloaded or
+  profiled in this kit.
+dataset_join_policy: forbidden_between_tracks
+datasets:
+- dataset_id: rees46_cosmetics
+  track: A_retention_operations
+  publisher_index_url: https://rees46.com/en/datasets
+  dataset_url: https://www.kaggle.com/datasets/mkechinov/ecommerce-events-history-in-cosmetics-shop
+  kaggle_handle: mkechinov/ecommerce-events-history-in-cosmetics-shop
+  acquisition_method: kagglehub.dataset_download_or_user_local_directory
+  acquisition_reference: https://github.com/Kaggle/kagglehub
+  reported_coverage: 2019-10 through 2020-02; actual coverage must be checked
+  expected_monthly_files_verify_locally:
+  - 2019-Oct.csv
+  - 2019-Nov.csv
+  - 2019-Dec.csv
+  - 2020-Jan.csv
+  - 2020-Feb.csv
+  expected_columns_verify_locally:
+  - event_time
+  - event_type
+  - product_id
+  - category_id
+  - category_code
+  - brand
+  - price
+  - user_id
+  - user_session
+  reported_license_label: Data files © Original Authors
+  terms_action: Capture current terms; do not assume redistribution permission; exclude raw data from Git and
+    release bundles unless permitted.
+  identity_limit: Observed user identifier, not verified person, contact address, consent, or omnichannel CRM
+    identity.
+  downloaded_version: null
+  downloaded_at: null
+  actual_record_count: null
+  actual_coverage_start: null
+  actual_coverage_end_exclusive: null
+  verified_currency: null
+  files_with_sha256: []
+- dataset_id: hillstrom_email
+  track: B_independent_campaign_lab
+  owner: Kevin Hillstrom / MineThatData
+  original_study_url: https://blog.minethatdata.com/2008/03/minethatdata-e-mail-analytics-and-data.html
+  acquisition_method: Original CSV linked by study; documented fallback sklift.datasets.fetch_hillstrom(target_col="all")
+  loader_reference: https://www.uplift-modeling.com/en/latest/api/datasets/fetch_hillstrom.html
+  catalog_reference: https://www.tensorflow.org/datasets/catalog/hillstrom
+  reported_customers: 64000
+  reported_followup_days: 14
+  expected_columns_verify_locally:
+  - recency
+  - history_segment
+  - history
+  - mens
+  - womens
+  - zip_code
+  - newbie
+  - channel
+  - segment
+  - visit
+  - conversion
+  - spend
+  expected_treatments_verify_locally:
+  - Mens E-Mail
+  - Womens E-Mail
+  - No E-Mail
+  terms_action: Capture original data terms separately from any loader software license.
+  identity_limit: No join key to cosmetics data. Preserve source-row identity if no customer ID exists; identical
+    features do not imply a duplicate person.
+  downloaded_version_or_source_revision: null
+  downloaded_at: null
+  actual_record_count: null
+  files_with_sha256: []
+documentation:
+- id: duckdb_csv
+  url: https://duckdb.org/docs/current/data/csv/overview
+- id: duckdb_parquet
+  url: https://duckdb.org/docs/current/data/parquet/overview
+- id: dbt_duckdb
+  url: https://github.com/duckdb/dbt-duckdb
+- id: uv_projects
+  url: https://docs.astral.sh/uv/guides/projects/
+- id: sklearn_leakage
+  url: https://scikit-learn.org/stable/common_pitfalls.html
+- id: sklearn_calibration
+  url: https://scikit-learn.org/stable/modules/calibration.html
+- id: sklearn_average_precision
+  url: https://scikit-learn.org/stable/modules/generated/sklearn.metrics.average_precision_score.html
+- id: streamlit_apptest
+  url: https://docs.streamlit.io/develop/api-reference/app-testing
+- id: statsmodels_power
+  url: https://www.statsmodels.org/stable/generated/statsmodels.stats.power.NormalIndPower.solve_power.html
+- id: sklift_qini
+  url: https://www.uplift-modeling.com/en/latest/api/metrics/qini_auc_score.html
