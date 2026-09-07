@@ -1,0 +1,11 @@
+retention:
+  target: local
+  outputs:
+    local:
+      type: duckdb
+      path: "{{ env_var('RETENTION_DB', '../warehouse/dev.duckdb') }}"
+      schema: analytics
+      threads: 2
+      settings:
+        memory_limit: 4GB
+        TimeZone: UTC

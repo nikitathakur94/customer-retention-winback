@@ -25,6 +25,6 @@ def connect(mode,readonly=False):
     con=duckdb.connect(str(p/f'{mode}.duckdb'),read_only=readonly)
     if not readonly:
         spill=ROOT/'.cache'/f'spill-{mode}'; spill.mkdir(parents=True,exist_ok=True)
-        con.execute("SET memory_limit='4GB'; SET threads=4; SET TimeZone='UTC'")
+        con.execute("SET memory_limit='4GB'; SET threads=4; SET enable_progress_bar=false; SET TimeZone='UTC'")
         con.execute(f"SET temp_directory='{spill}'")
     return con

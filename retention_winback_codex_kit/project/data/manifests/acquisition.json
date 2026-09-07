@@ -1,0 +1,57 @@
+{
+  "cosmetics": {
+    "status": "acquired",
+    "version": "6",
+    "time": "2026-09-07T12:03:12.324733+00:00",
+    "source": "https://www.kaggle.com/datasets/mkechinov/ecommerce-events-history-in-cosmetics-shop",
+    "terms": "Data files \u00a9 Original Authors (kit card transcription); no redistribution assumed",
+    "files": [
+      {
+        "name": "2019-Oct.csv",
+        "path": "/Users/nik/Documents/GitHub/customer-retention-winback/retention_winback_codex_kit/project/data/raw/cosmetics/cache/datasets/mkechinov/ecommerce-events-history-in-cosmetics-shop/versions/6/2019-Oct.csv",
+        "bytes": 482542278,
+        "sha256": "d87b1124a003151592e722996c6295aba2d286626c5db624c49d749877478c23"
+      },
+      {
+        "name": "2019-Nov.csv",
+        "path": "/Users/nik/Documents/GitHub/customer-retention-winback/retention_winback_codex_kit/project/data/raw/cosmetics/cache/datasets/mkechinov/ecommerce-events-history-in-cosmetics-shop/versions/6/2019-Nov.csv",
+        "bytes": 545839412,
+        "sha256": "25b03eea9020a64f97659a4cbce9d801ca81872910ce72348bfa607817539755"
+      },
+      {
+        "name": "2019-Dec.csv",
+        "path": "/Users/nik/Documents/GitHub/customer-retention-winback/retention_winback_codex_kit/project/data/raw/cosmetics/cache/datasets/mkechinov/ecommerce-events-history-in-cosmetics-shop/versions/6/2019-Dec.csv",
+        "bytes": 415302972,
+        "sha256": "ebf98f504e238109efa406d26a26a90e0d467faa938bf96b68e3fea663d2008e"
+      },
+      {
+        "name": "2020-Jan.csv",
+        "path": "/Users/nik/Documents/GitHub/customer-retention-winback/retention_winback_codex_kit/project/data/raw/cosmetics/cache/datasets/mkechinov/ecommerce-events-history-in-cosmetics-shop/versions/6/2020-Jan.csv",
+        "bytes": 501792804,
+        "sha256": "c6d8d6bdcf0b6bccb61a14447afdca08e95683f34f279befb1ac580ddc214853"
+      },
+      {
+        "name": "2020-Feb.csv",
+        "path": "/Users/nik/Documents/GitHub/customer-retention-winback/retention_winback_codex_kit/project/data/raw/cosmetics/cache/datasets/mkechinov/ecommerce-events-history-in-cosmetics-shop/versions/6/2020-Feb.csv",
+        "bytes": 488799986,
+        "sha256": "605c76fd75b01b9b60d1ae5f412d2a774158fdd18e0a95377b3c547a556f1c1b"
+      }
+    ]
+  },
+  "hillstrom": {
+    "status": "acquired",
+    "time": "2026-09-07T12:03:34.776768+00:00",
+    "source": "https://www.uplift-modeling.com/en/latest/api/datasets/fetch_hillstrom.html",
+    "method": "documented sklift fetch_hillstrom fallback",
+    "terms": "Author supplies for public analysis challenge; redistribution rights not assumed",
+    "files": [
+      {
+        "name": "hillstrom.csv",
+        "path": "/Users/nik/Documents/GitHub/customer-retention-winback/retention_winback_codex_kit/project/data/raw/hillstrom/hillstrom.csv",
+        "bytes": 4028958,
+        "sha256": "00a6a868e05a9ffe7382da51629f6d6dce88c5acfc945e79d314ebc78fd3a2c0"
+      }
+    ],
+    "rows": 64000
+  }
+}

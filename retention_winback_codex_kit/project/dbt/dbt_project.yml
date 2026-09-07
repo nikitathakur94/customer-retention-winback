@@ -1,0 +1,9 @@
+name: retention
+version: '1.0'
+config-version: 2
+profile: retention
+model-paths: [models]
+test-paths: [tests]
+models:
+  retention:
+    +materialized: table

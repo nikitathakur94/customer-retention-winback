@@ -1,0 +1,21 @@
+version: 2
+sources:
+  - name: retail
+    schema: main
+    tables:
+      - name: int_behavior_events
+      - name: mart_customer_snapshot
+      - name: mart_customer_outcome
+models:
+  - name: dim_customer_observed
+    columns:
+      - name: user_id
+        tests: [unique, not_null]
+  - name: fct_purchase_occasions
+    columns:
+      - name: occasion_key
+        tests: [unique, not_null]
+  - name: fct_customer_day
+    columns:
+      - name: customer_day_key
+        tests: [unique, not_null]
