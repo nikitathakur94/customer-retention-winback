@@ -32,3 +32,6 @@ artifacts/
 *.duckdb
 *.duckdb.wal
 *.log
+
+node_modules/
+**/dbt/.user.yml

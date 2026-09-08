@@ -23,6 +23,7 @@ def run_dir(mode):
 def connect(mode,readonly=False):
     p=ROOT/'warehouse'; p.mkdir(exist_ok=True)
     con=duckdb.connect(str(p/f'{mode}.duckdb'),read_only=readonly)
+    con.execute("SET TimeZone='UTC'")
     if not readonly:
         spill=ROOT/'.cache'/f'spill-{mode}'; spill.mkdir(parents=True,exist_ok=True)
         con.execute("SET memory_limit='4GB'; SET threads=4; SET enable_progress_bar=false; SET TimeZone='UTC'")

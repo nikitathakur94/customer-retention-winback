@@ -1,0 +1,308 @@
+version: '1.0'
+features:
+- name: purchase_recency
+  family: purchase
+  grain: observed user and UTC cutoff
+  window: '[cutoff-60d,cutoff); nested suffix windows end at cutoff'
+  definition_sql: src/retention/snapshots.py:snapshot_sql; generated docs/snapshot_reference.sql
+  null_behavior: SQL NULL when no reference event or denominator; training-only median
+    imputation. Counts/sums as specified in SQL.
+  direction: exploratory hypothesis; no causal interpretation
+  leakage_guard: feature_max_timestamp < as_of_timestamp; no metadata backfill
+- name: purchasing_days_7
+  family: purchase
+  grain: observed user and UTC cutoff
+  window: '[cutoff-60d,cutoff); nested suffix windows end at cutoff'
+  definition_sql: src/retention/snapshots.py:snapshot_sql; generated docs/snapshot_reference.sql
+  null_behavior: SQL NULL when no reference event or denominator; training-only median
+    imputation. Counts/sums as specified in SQL.
+  direction: exploratory hypothesis; no causal interpretation
+  leakage_guard: feature_max_timestamp < as_of_timestamp; no metadata backfill
+- name: purchasing_days_14
+  family: purchase
+  grain: observed user and UTC cutoff
+  window: '[cutoff-60d,cutoff); nested suffix windows end at cutoff'
+  definition_sql: src/retention/snapshots.py:snapshot_sql; generated docs/snapshot_reference.sql
+  null_behavior: SQL NULL when no reference event or denominator; training-only median
+    imputation. Counts/sums as specified in SQL.
+  direction: exploratory hypothesis; no causal interpretation
+  leakage_guard: feature_max_timestamp < as_of_timestamp; no metadata backfill
+- name: purchasing_days_28
+  family: purchase
+  grain: observed user and UTC cutoff
+  window: '[cutoff-60d,cutoff); nested suffix windows end at cutoff'
+  definition_sql: src/retention/snapshots.py:snapshot_sql; generated docs/snapshot_reference.sql
+  null_behavior: SQL NULL when no reference event or denominator; training-only median
+    imputation. Counts/sums as specified in SQL.
+  direction: exploratory hypothesis; no causal interpretation
+  leakage_guard: feature_max_timestamp < as_of_timestamp; no metadata backfill
+- name: purchasing_days_60
+  family: purchase
+  grain: observed user and UTC cutoff
+  window: '[cutoff-60d,cutoff); nested suffix windows end at cutoff'
+  definition_sql: src/retention/snapshots.py:snapshot_sql; generated docs/snapshot_reference.sql
+  null_behavior: SQL NULL when no reference event or denominator; training-only median
+    imputation. Counts/sums as specified in SQL.
+  direction: exploratory hypothesis; no causal interpretation
+  leakage_guard: feature_max_timestamp < as_of_timestamp; no metadata backfill
+- name: occasions_60
+  family: purchase
+  grain: observed user and UTC cutoff
+  window: '[cutoff-60d,cutoff); nested suffix windows end at cutoff'
+  definition_sql: src/retention/snapshots.py:snapshot_sql; generated docs/snapshot_reference.sql
+  null_behavior: SQL NULL when no reference event or denominator; training-only median
+    imputation. Counts/sums as specified in SQL.
+  direction: exploratory hypothesis; no causal interpretation
+  leakage_guard: feature_max_timestamp < as_of_timestamp; no metadata backfill
+- name: value_28
+  family: purchase
+  grain: observed user and UTC cutoff
+  window: '[cutoff-60d,cutoff); nested suffix windows end at cutoff'
+  definition_sql: src/retention/snapshots.py:snapshot_sql; generated docs/snapshot_reference.sql
+  null_behavior: SQL NULL when no reference event or denominator; training-only median
+    imputation. Counts/sums as specified in SQL.
+  direction: exploratory hypothesis; no causal interpretation
+  leakage_guard: feature_max_timestamp < as_of_timestamp; no metadata backfill
+- name: value_60
+  family: purchase
+  grain: observed user and UTC cutoff
+  window: '[cutoff-60d,cutoff); nested suffix windows end at cutoff'
+  definition_sql: src/retention/snapshots.py:snapshot_sql; generated docs/snapshot_reference.sql
+  null_behavior: SQL NULL when no reference event or denominator; training-only median
+    imputation. Counts/sums as specified in SQL.
+  direction: exploratory hypothesis; no causal interpretation
+  leakage_guard: feature_max_timestamp < as_of_timestamp; no metadata backfill
+- name: valid_price_share
+  family: purchase
+  grain: observed user and UTC cutoff
+  window: '[cutoff-60d,cutoff); nested suffix windows end at cutoff'
+  definition_sql: src/retention/snapshots.py:snapshot_sql; generated docs/snapshot_reference.sql
+  null_behavior: SQL NULL when no reference event or denominator; training-only median
+    imputation. Counts/sums as specified in SQL.
+  direction: exploratory hypothesis; no causal interpretation
+  leakage_guard: feature_max_timestamp < as_of_timestamp; no metadata backfill
+- name: median_purchase_event_value
+  family: purchase
+  grain: observed user and UTC cutoff
+  window: '[cutoff-60d,cutoff); nested suffix windows end at cutoff'
+  definition_sql: src/retention/snapshots.py:snapshot_sql; generated docs/snapshot_reference.sql
+  null_behavior: SQL NULL when no reference event or denominator; training-only median
+    imputation. Counts/sums as specified in SQL.
+  direction: exploratory hypothesis; no causal interpretation
+  leakage_guard: feature_max_timestamp < as_of_timestamp; no metadata backfill
+- name: first_purchase_age
+  family: purchase
+  grain: observed user and UTC cutoff
+  window: '[cutoff-60d,cutoff); nested suffix windows end at cutoff'
+  definition_sql: src/retention/snapshots.py:snapshot_sql; generated docs/snapshot_reference.sql
+  null_behavior: SQL NULL when no reference event or denominator; training-only median
+    imputation. Counts/sums as specified in SQL.
+  direction: exploratory hypothesis; no causal interpretation
+  leakage_guard: feature_max_timestamp < as_of_timestamp; no metadata backfill
+- name: repeat_buyer
+  family: purchase
+  grain: observed user and UTC cutoff
+  window: '[cutoff-60d,cutoff); nested suffix windows end at cutoff'
+  definition_sql: src/retention/snapshots.py:snapshot_sql; generated docs/snapshot_reference.sql
+  null_behavior: SQL NULL when no reference event or denominator; training-only median
+    imputation. Counts/sums as specified in SQL.
+  direction: exploratory hypothesis; no causal interpretation
+  leakage_guard: feature_max_timestamp < as_of_timestamp; no metadata backfill
+- name: mean_purchase_gap
+  family: purchase
+  grain: observed user and UTC cutoff
+  window: '[cutoff-60d,cutoff); nested suffix windows end at cutoff'
+  definition_sql: src/retention/snapshots.py:snapshot_sql; generated docs/snapshot_reference.sql
+  null_behavior: SQL NULL when no reference event or denominator; training-only median
+    imputation. Counts/sums as specified in SQL.
+  direction: exploratory hypothesis; no causal interpretation
+  leakage_guard: feature_max_timestamp < as_of_timestamp; no metadata backfill
+- name: event_recency
+  family: digital
+  grain: observed user and UTC cutoff
+  window: '[cutoff-60d,cutoff); nested suffix windows end at cutoff'
+  definition_sql: src/retention/snapshots.py:snapshot_sql; generated docs/snapshot_reference.sql
+  null_behavior: SQL NULL when no reference event or denominator; training-only median
+    imputation. Counts/sums as specified in SQL.
+  direction: exploratory hypothesis; no causal interpretation
+  leakage_guard: feature_max_timestamp < as_of_timestamp; no metadata backfill
+- name: view_recency
+  family: digital
+  grain: observed user and UTC cutoff
+  window: '[cutoff-60d,cutoff); nested suffix windows end at cutoff'
+  definition_sql: src/retention/snapshots.py:snapshot_sql; generated docs/snapshot_reference.sql
+  null_behavior: SQL NULL when no reference event or denominator; training-only median
+    imputation. Counts/sums as specified in SQL.
+  direction: exploratory hypothesis; no causal interpretation
+  leakage_guard: feature_max_timestamp < as_of_timestamp; no metadata backfill
+- name: cart_recency
+  family: digital
+  grain: observed user and UTC cutoff
+  window: '[cutoff-60d,cutoff); nested suffix windows end at cutoff'
+  definition_sql: src/retention/snapshots.py:snapshot_sql; generated docs/snapshot_reference.sql
+  null_behavior: SQL NULL when no reference event or denominator; training-only median
+    imputation. Counts/sums as specified in SQL.
+  direction: exploratory hypothesis; no causal interpretation
+  leakage_guard: feature_max_timestamp < as_of_timestamp; no metadata backfill
+- name: active_days_7
+  family: digital
+  grain: observed user and UTC cutoff
+  window: '[cutoff-60d,cutoff); nested suffix windows end at cutoff'
+  definition_sql: src/retention/snapshots.py:snapshot_sql; generated docs/snapshot_reference.sql
+  null_behavior: SQL NULL when no reference event or denominator; training-only median
+    imputation. Counts/sums as specified in SQL.
+  direction: exploratory hypothesis; no causal interpretation
+  leakage_guard: feature_max_timestamp < as_of_timestamp; no metadata backfill
+- name: active_days_14
+  family: digital
+  grain: observed user and UTC cutoff
+  window: '[cutoff-60d,cutoff); nested suffix windows end at cutoff'
+  definition_sql: src/retention/snapshots.py:snapshot_sql; generated docs/snapshot_reference.sql
+  null_behavior: SQL NULL when no reference event or denominator; training-only median
+    imputation. Counts/sums as specified in SQL.
+  direction: exploratory hypothesis; no causal interpretation
+  leakage_guard: feature_max_timestamp < as_of_timestamp; no metadata backfill
+- name: active_days_28
+  family: digital
+  grain: observed user and UTC cutoff
+  window: '[cutoff-60d,cutoff); nested suffix windows end at cutoff'
+  definition_sql: src/retention/snapshots.py:snapshot_sql; generated docs/snapshot_reference.sql
+  null_behavior: SQL NULL when no reference event or denominator; training-only median
+    imputation. Counts/sums as specified in SQL.
+  direction: exploratory hypothesis; no causal interpretation
+  leakage_guard: feature_max_timestamp < as_of_timestamp; no metadata backfill
+- name: sessions_28
+  family: digital
+  grain: observed user and UTC cutoff
+  window: '[cutoff-60d,cutoff); nested suffix windows end at cutoff'
+  definition_sql: src/retention/snapshots.py:snapshot_sql; generated docs/snapshot_reference.sql
+  null_behavior: SQL NULL when no reference event or denominator; training-only median
+    imputation. Counts/sums as specified in SQL.
+  direction: exploratory hypothesis; no causal interpretation
+  leakage_guard: feature_max_timestamp < as_of_timestamp; no metadata backfill
+- name: views_28
+  family: digital
+  grain: observed user and UTC cutoff
+  window: '[cutoff-60d,cutoff); nested suffix windows end at cutoff'
+  definition_sql: src/retention/snapshots.py:snapshot_sql; generated docs/snapshot_reference.sql
+  null_behavior: SQL NULL when no reference event or denominator; training-only median
+    imputation. Counts/sums as specified in SQL.
+  direction: exploratory hypothesis; no causal interpretation
+  leakage_guard: feature_max_timestamp < as_of_timestamp; no metadata backfill
+- name: carts_28
+  family: digital
+  grain: observed user and UTC cutoff
+  window: '[cutoff-60d,cutoff); nested suffix windows end at cutoff'
+  definition_sql: src/retention/snapshots.py:snapshot_sql; generated docs/snapshot_reference.sql
+  null_behavior: SQL NULL when no reference event or denominator; training-only median
+    imputation. Counts/sums as specified in SQL.
+  direction: exploratory hypothesis; no causal interpretation
+  leakage_guard: feature_max_timestamp < as_of_timestamp; no metadata backfill
+- name: removals_28
+  family: digital
+  grain: observed user and UTC cutoff
+  window: '[cutoff-60d,cutoff); nested suffix windows end at cutoff'
+  definition_sql: src/retention/snapshots.py:snapshot_sql; generated docs/snapshot_reference.sql
+  null_behavior: SQL NULL when no reference event or denominator; training-only median
+    imputation. Counts/sums as specified in SQL.
+  direction: exploratory hypothesis; no causal interpretation
+  leakage_guard: feature_max_timestamp < as_of_timestamp; no metadata backfill
+- name: products_28
+  family: digital
+  grain: observed user and UTC cutoff
+  window: '[cutoff-60d,cutoff); nested suffix windows end at cutoff'
+  definition_sql: src/retention/snapshots.py:snapshot_sql; generated docs/snapshot_reference.sql
+  null_behavior: SQL NULL when no reference event or denominator; training-only median
+    imputation. Counts/sums as specified in SQL.
+  direction: exploratory hypothesis; no causal interpretation
+  leakage_guard: feature_max_timestamp < as_of_timestamp; no metadata backfill
+- name: categories_28
+  family: digital
+  grain: observed user and UTC cutoff
+  window: '[cutoff-60d,cutoff); nested suffix windows end at cutoff'
+  definition_sql: src/retention/snapshots.py:snapshot_sql; generated docs/snapshot_reference.sql
+  null_behavior: SQL NULL when no reference event or denominator; training-only median
+    imputation. Counts/sums as specified in SQL.
+  direction: exploratory hypothesis; no causal interpretation
+  leakage_guard: feature_max_timestamp < as_of_timestamp; no metadata backfill
+- name: cart_without_purchase_14
+  family: digital
+  grain: observed user and UTC cutoff
+  window: '[cutoff-60d,cutoff); nested suffix windows end at cutoff'
+  definition_sql: src/retention/snapshots.py:snapshot_sql; generated docs/snapshot_reference.sql
+  null_behavior: SQL NULL when no reference event or denominator; training-only median
+    imputation. Counts/sums as specified in SQL.
+  direction: exploratory hypothesis; no causal interpretation
+  leakage_guard: feature_max_timestamp < as_of_timestamp; no metadata backfill
+- name: activity_recent_14
+  family: digital
+  grain: observed user and UTC cutoff
+  window: '[cutoff-60d,cutoff); nested suffix windows end at cutoff'
+  definition_sql: src/retention/snapshots.py:snapshot_sql; generated docs/snapshot_reference.sql
+  null_behavior: SQL NULL when no reference event or denominator; training-only median
+    imputation. Counts/sums as specified in SQL.
+  direction: exploratory hypothesis; no causal interpretation
+  leakage_guard: feature_max_timestamp < as_of_timestamp; no metadata backfill
+- name: activity_previous_14
+  family: digital
+  grain: observed user and UTC cutoff
+  window: '[cutoff-60d,cutoff); nested suffix windows end at cutoff'
+  definition_sql: src/retention/snapshots.py:snapshot_sql; generated docs/snapshot_reference.sql
+  null_behavior: SQL NULL when no reference event or denominator; training-only median
+    imputation. Counts/sums as specified in SQL.
+  direction: exploratory hypothesis; no causal interpretation
+  leakage_guard: feature_max_timestamp < as_of_timestamp; no metadata backfill
+- name: activity_change
+  family: digital
+  grain: observed user and UTC cutoff
+  window: '[cutoff-60d,cutoff); nested suffix windows end at cutoff'
+  definition_sql: src/retention/snapshots.py:snapshot_sql; generated docs/snapshot_reference.sql
+  null_behavior: SQL NULL when no reference event or denominator; training-only median
+    imputation. Counts/sums as specified in SQL.
+  direction: exploratory hypothesis; no causal interpretation
+  leakage_guard: feature_max_timestamp < as_of_timestamp; no metadata backfill
+- name: activity_relative_change
+  family: digital
+  grain: observed user and UTC cutoff
+  window: '[cutoff-60d,cutoff); nested suffix windows end at cutoff'
+  definition_sql: src/retention/snapshots.py:snapshot_sql; generated docs/snapshot_reference.sql
+  null_behavior: SQL NULL when no reference event or denominator; training-only median
+    imputation. Counts/sums as specified in SQL.
+  direction: exploratory hypothesis; no causal interpretation
+  leakage_guard: feature_max_timestamp < as_of_timestamp; no metadata backfill
+- name: no_activity_baseline
+  family: digital
+  grain: observed user and UTC cutoff
+  window: '[cutoff-60d,cutoff); nested suffix windows end at cutoff'
+  definition_sql: src/retention/snapshots.py:snapshot_sql; generated docs/snapshot_reference.sql
+  null_behavior: SQL NULL when no reference event or denominator; training-only median
+    imputation. Counts/sums as specified in SQL.
+  direction: exploratory hypothesis; no causal interpretation
+  leakage_guard: feature_max_timestamp < as_of_timestamp; no metadata backfill
+- name: purchase_categories
+  family: digital
+  grain: observed user and UTC cutoff
+  window: '[cutoff-60d,cutoff); nested suffix windows end at cutoff'
+  definition_sql: src/retention/snapshots.py:snapshot_sql; generated docs/snapshot_reference.sql
+  null_behavior: SQL NULL when no reference event or denominator; training-only median
+    imputation. Counts/sums as specified in SQL.
+  direction: exploratory hypothesis; no causal interpretation
+  leakage_guard: feature_max_timestamp < as_of_timestamp; no metadata backfill
+- name: category_view_concentration
+  family: digital
+  grain: observed user and UTC cutoff
+  window: '[cutoff-60d,cutoff); nested suffix windows end at cutoff'
+  definition_sql: src/retention/snapshots.py:snapshot_sql; generated docs/snapshot_reference.sql
+  null_behavior: SQL NULL when no reference event or denominator; training-only median
+    imputation. Counts/sums as specified in SQL.
+  direction: exploratory hypothesis; no causal interpretation
+  leakage_guard: feature_max_timestamp < as_of_timestamp; no metadata backfill
+- name: missing_session_share
+  family: digital
+  grain: observed user and UTC cutoff
+  window: '[cutoff-60d,cutoff); nested suffix windows end at cutoff'
+  definition_sql: src/retention/snapshots.py:snapshot_sql; generated docs/snapshot_reference.sql
+  null_behavior: SQL NULL when no reference event or denominator; training-only median
+    imputation. Counts/sums as specified in SQL.
+  direction: exploratory hypothesis; no causal interpretation
+  leakage_guard: feature_max_timestamp < as_of_timestamp; no metadata backfill
