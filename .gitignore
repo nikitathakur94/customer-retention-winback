@@ -35,3 +35,6 @@ artifacts/
 
 node_modules/
 **/dbt/.user.yml
+
+.chart-data-*/
+.codex-finalizer/

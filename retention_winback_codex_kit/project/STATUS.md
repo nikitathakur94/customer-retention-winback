@@ -1,22 +1,24 @@
 # Execution status
 
-Updated 2026-09-08. This is a public-data reconstruction, not historical employment results.
+Updated 2026-09-09. The seven core implementation phases are complete. This is a public-data reconstruction, not historical employment results.
 
-- Phase 1 COMPLETE: Python 3.12 environment and uv lock tested; real-source acquisition pinned and hashed. 16 GiB RAM, bounded 4 GiB DuckDB / four threads. Stable dbt 1.10 used after experimental parser package installation failed TLS validation.
-- Phase 2 COMPLETE: real whole-customer dev sample ingestion, snapshots, model and initial dashboard rendered.
-- Phase 3 COMPLETE: 20,692,840 full source events; five months present, 152 daily coverage dates. SQL/dbt build and 10 tests pass. Raw multiplicity retained, including 1,109,098 identical excess rows. Intraday tracking completeness cannot be proven.
-- Phase 4 COMPLETE: six frozen full-data candidates, disjoint validation calibration/policy selection, final test, latest scoring, audience and dry-run assignment. Full test N=48,865; selected tree_combined ROC-AUC=0.783826, Brier=0.089854. Latest eligible N=49,473; analytical candidates=4,948. Consent/contactability unknown.
-- Phase 5 COMPLETE: independent real Hillstrom N=64,000; ITT arm comparisons, fixed split T-learner, uncertainty and IPW policy comparisons. Visit Qini interval includes zero, so heterogeneous targeting advantage is not established.
-- Phase 6 IN PROGRESS: seven pages render, initial unit/UI suite 12 passed; full integration suite 4 passed. Browser layout review underway. Ten learning chapters and five notebooks generated; notebook execution pending. Real customer features and source rows reconcile, future outcomes separate.
-- Phase 7 IN PROGRESS: full computational stages executed and logged under artifacts/full-v1/execution. Reports and metrics manifest generated/reconciled. Editable slides/PDF and final visual review pending.
+1. Environment and source contracts: complete. Python 3.12, tested uv lock, pinned downloads with hashes and source terms. DuckDB limited to 4 GiB and four threads.
+2. Real-data development pipeline: complete. Stable whole-customer sampling across monthly files; separate calibration membership.
+3. Full data and marts: complete. 20,692,840 events across five months and 152 dates; 1,109,098 identical excess rows retained and measured. Four dbt models and ten dbt tests pass.
+4. Risk and audience: complete. Six frozen candidates, separate validation calibration/selection, final test and latest scoring. Selected tree_combined: test N=48,865, ROC-AUC 0.783826, Brier 0.089854. Latest eligible N=49,473; candidates=4,948. Consent/contactability unknown.
+5. Independent experiment analysis: complete. Hillstrom N=64,000; assigned-customer comparisons, out-of-sample uplift and uncertainty. Visit Qini interval includes zero; heterogeneous targeting advantage is not established.
+6. Dashboard and learning: complete. Seven pages reviewed in browser, 13 unit/UI tests and five full-data integration tests pass. Ten learning chapters and five successfully executed notebooks; source-reconciled customer traces.
+7. Reproduction and handoff: complete. Full computational stages logged; `make reproduce MODE=full` passes with explicit reuse of frozen stages. Reports, editable 14-slide PPTX and rendered PDF produced; all 14 PDF pages visually inspected. Font configuration fixed the PDF fallback font. See HANDOFF.md and ACCEPTANCE_EVIDENCE.md.
 
 ## Git checkpoints
 
-- 02325f4: specification, contracts and environment setup (pushed).
-- 8fea45d: real-data pipeline, modeling and campaign analysis (pushed).
+- 02325f4: specification, contracts and environment setup.
+- 8fea45d: pipeline, modeling and campaign analysis.
+- b8e8902: dashboard, full reports and learning.
+- Final completion checkpoint: see Git history for this document's commit.
 
-Only source code, configuration, dependency lock, guidance and compact provenance/status documents belong in Git. Data, derived customer records, model binaries, figures/screenshots and presentation outputs remain local under ignored artifacts/data directories.
+Data, derived customer records, models, screenshots and generated presentations stay in ignored local directories. Source code, dependency locks, notebooks without outputs, documentation and compact provenance are tracked.
 
-## Verification caveats
+## Scope and limitations
 
-Read-only trace inspection initially used the host timezone; connection timezone is now UTC and trace totals pass. This changed display/reconciliation, not trained features or test design. Optional 14/42-day horizon and rolling-origin extensions were not run. No original-project results, deployed campaigns or causal retailer benefit are claimed.
+Optional 14/42-day and rolling-origin extensions were not run. Native Tableau/Power BI workbooks are not supplied; BI exports and handoff instructions are supplied. Source daily coverage cannot prove absence of intraday outages. Stable dbt was pinned after experimental parser installation failed TLS validation. The deck was rendered with bundled LibreOffice, not inspected in Microsoft PowerPoint. Post-test changes addressed display, UTC trace reads, documentation and export formatting; the frozen model and test design were preserved. No outreach or measured cosmetics campaign effect is claimed.

@@ -13,3 +13,8 @@ build-backend = "hatchling.build"
 packages = ["src/retention"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.16.6",
+]

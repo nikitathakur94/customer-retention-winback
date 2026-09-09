@@ -2,7 +2,7 @@
   "cosmetics": {
     "status": "acquired",
     "version": "6",
-    "time": "2026-09-07T12:03:12.324733+00:00",
+    "time": "2026-09-08T07:01:35.508598+00:00",
     "source": "https://www.kaggle.com/datasets/mkechinov/ecommerce-events-history-in-cosmetics-shop",
     "terms": "Data files \u00a9 Original Authors (kit card transcription); no redistribution assumed",
     "files": [
@@ -40,7 +40,7 @@
   },
   "hillstrom": {
     "status": "acquired",
-    "time": "2026-09-07T12:03:34.776768+00:00",
+    "time": "2026-09-08T07:01:35.555490+00:00",
     "source": "https://www.uplift-modeling.com/en/latest/api/datasets/fetch_hillstrom.html",
     "method": "documented sklift fetch_hillstrom fallback",
     "terms": "Author supplies for public analysis challenge; redistribution rights not assumed",

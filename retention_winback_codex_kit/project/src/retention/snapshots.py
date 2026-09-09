@@ -1,20 +1,36 @@
 """Half-open feature windows; outcomes stored separately and immature labels null."""
-from .common import CUTS,connect,read,run_dir,save
-from .features import FEATURES
+
+from .common import CUTS, connect, read, run_dir, save
+
 
 def snapshot_sql(cutoff):
     # Cutoff is a validated ISO date from configuration, never dashboard free text.
     import datetime
+
     datetime.date.fromisoformat(cutoff)
-    purchase="event_type='purchase'"
-    expressions=[]
-    for days in [7,14,28,60]:
-        expressions.append(f"count(DISTINCT cast(event_time AS DATE)) FILTER(WHERE {purchase} AND event_time>=t-INTERVAL '{days} days') AS purchasing_days_{days}")
-    for days in [7,14,28]: expressions.append(f"count(DISTINCT cast(event_time AS DATE)) FILTER(WHERE event_time>=t-INTERVAL '{days} days') AS active_days_{days}")
-    for event,name in [('view','views'),('cart','carts'),('remove_from_cart','removals')]:
-        expressions.append(f"count(*) FILTER(WHERE event_type='{event}' AND event_time>=t-INTERVAL '28 days') AS {name}_28")
-    for days in [28,60]: expressions.append(f"coalesce(sum(price) FILTER(WHERE {purchase} AND valid_price AND event_time>=t-INTERVAL '{days} days'),0) AS value_{days}")
-    extra=',\n'.join(expressions)
+    purchase = "event_type='purchase'"
+    expressions = []
+    for days in [7, 14, 28, 60]:
+        expressions.append(
+            f"count(DISTINCT cast(event_time AS DATE)) FILTER(WHERE {purchase} AND event_time>=t-INTERVAL '{days} days') AS purchasing_days_{days}"
+        )
+    for days in [7, 14, 28]:
+        expressions.append(
+            f"count(DISTINCT cast(event_time AS DATE)) FILTER(WHERE event_time>=t-INTERVAL '{days} days') AS active_days_{days}"
+        )
+    for event, name in [
+        ("view", "views"),
+        ("cart", "carts"),
+        ("remove_from_cart", "removals"),
+    ]:
+        expressions.append(
+            f"count(*) FILTER(WHERE event_type='{event}' AND event_time>=t-INTERVAL '28 days') AS {name}_28"
+        )
+    for days in [28, 60]:
+        expressions.append(
+            f"coalesce(sum(price) FILTER(WHERE {purchase} AND valid_price AND event_time>=t-INTERVAL '{days} days'),0) AS value_{days}"
+        )
+    extra = ",\n".join(expressions)
     return f"""WITH windowed AS (SELECT *,TIMESTAMPTZ '{cutoff} 00:00:00+00' t FROM int_behavior_events
     WHERE event_time>=TIMESTAMPTZ '{cutoff} 00:00:00+00'-INTERVAL '60 days' AND event_time<TIMESTAMPTZ '{cutoff} 00:00:00+00'),
     category_counts AS (SELECT user_id, category_id,count(*) n FROM windowed WHERE event_type='view' AND category_id IS NOT NULL GROUP BY 1,2),
@@ -45,22 +61,63 @@ def snapshot_sql(cutoff):
     activity_previous_14=0 no_activity_baseline,c.category_view_concentration
     FROM aggregates a LEFT JOIN concentration c USING(user_id)"""
 
-def build(mode='dev'):
+
+def build(mode="dev"):
     import pandas as pd
-    con=connect(mode); quality=read(run_dir(mode)/'quality.json'); summary=[]
-    for i,(split,t) in enumerate(CUTS.items()):
-        con.execute('CREATE OR REPLACE TEMP TABLE snap AS '+snapshot_sql(t))
-        con.execute(('CREATE OR REPLACE TABLE mart_customer_snapshot AS ' if i==0 else 'INSERT INTO mart_customer_snapshot ')+f"SELECT *, '{split}' split FROM snap")
-        end=pd.Timestamp(t,tz='UTC')+pd.Timedelta(days=28)
-        mature=quality['coverage_usable'] and end<=pd.Timestamp(quality['coverage_end_exclusive'],tz='UTC')
-        label="CASE WHEN count(e.user_id)>0 THEN 0 ELSE 1 END" if mature else 'NULL::INTEGER'
-        query=f"""SELECT s.user_id,s.as_of_timestamp,'{split}' split,{str(mature).lower()} label_mature,
+
+    con = connect(mode)
+    quality = read(run_dir(mode) / "quality.json")
+    summary = []
+    for i, (split, t) in enumerate(CUTS.items()):
+        con.execute("CREATE OR REPLACE TEMP TABLE snap AS " + snapshot_sql(t))
+        con.execute(
+            (
+                "CREATE OR REPLACE TABLE mart_customer_snapshot AS "
+                if i == 0
+                else "INSERT INTO mart_customer_snapshot "
+            )
+            + f"SELECT *, '{split}' split FROM snap"
+        )
+        end = pd.Timestamp(t, tz="UTC") + pd.Timedelta(days=28)
+        mature = quality["coverage_usable"] and end <= pd.Timestamp(
+            quality["coverage_end_exclusive"], tz="UTC"
+        )
+        label = (
+            "CASE WHEN count(e.user_id)>0 THEN 0 ELSE 1 END"
+            if mature
+            else "NULL::INTEGER"
+        )
+        query = f"""SELECT s.user_id,s.as_of_timestamp,'{split}' split,{str(mature).lower()} label_mature,
         {label} non_repurchase_28d FROM snap s LEFT JOIN int_behavior_events e ON e.user_id=s.user_id AND e.event_type='purchase' AND e.event_time>=s.as_of_timestamp AND e.event_time<s.as_of_timestamp+INTERVAL '28 days' GROUP BY 1,2"""
-        con.execute(('CREATE OR REPLACE TABLE mart_customer_outcome AS ' if i==0 else 'INSERT INTO mart_customer_outcome ')+query)
-        df=con.execute(f"SELECT * FROM mart_customer_snapshot WHERE split='{split}'").df()
-        df.to_parquet(run_dir(mode)/f'features_{split}.parquet',index=False)
-        outcomes=con.execute(f"SELECT * FROM mart_customer_outcome WHERE split='{split}'").df(); outcomes.to_parquet(run_dir(mode)/f'outcomes_{split}.parquet',index=False)
-        assert (df.feature_max_timestamp<df.as_of_timestamp).all()
+        con.execute(
+            (
+                "CREATE OR REPLACE TABLE mart_customer_outcome AS "
+                if i == 0
+                else "INSERT INTO mart_customer_outcome "
+            )
+            + query
+        )
+        df = con.execute(
+            f"SELECT * FROM mart_customer_snapshot WHERE split='{split}'"
+        ).df()
+        df.to_parquet(run_dir(mode) / f"features_{split}.parquet", index=False)
+        outcomes = con.execute(
+            f"SELECT * FROM mart_customer_outcome WHERE split='{split}'"
+        ).df()
+        outcomes.to_parquet(run_dir(mode) / f"outcomes_{split}.parquet", index=False)
+        assert (df.feature_max_timestamp < df.as_of_timestamp).all()
         assert not df.user_id.duplicated().any()
-        summary.append({'split':split,'cutoff':t,'n':len(df),'label_mature':mature,'non_repurchase_prevalence':float(outcomes.non_repurchase_28d.mean()) if mature else None})
-    save(run_dir(mode)/'snapshots.json',summary); con.close(); return summary
+        summary.append(
+            {
+                "split": split,
+                "cutoff": t,
+                "n": len(df),
+                "label_mature": mature,
+                "non_repurchase_prevalence": float(outcomes.non_repurchase_28d.mean())
+                if mature
+                else None,
+            }
+        )
+    save(run_dir(mode) / "snapshots.json", summary)
+    con.close()
+    return summary
